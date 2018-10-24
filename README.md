@@ -58,7 +58,7 @@ CMD /usr/local/bin/fcreds -r eu-west-2 exec -n postgresqlRootPwd -- node worker.
 
 ## IAM policy
 
-To access the secret value from your application use [tight and granular IAM policies](https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_identity-based-policies.html#permissions_grant-limited-resources) tied to roles. Any role used to call fcreds will require an IAM policy that looks a bit like this:
+To access the secret value from your application and keep things proper tight use [granular IAM policies](https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_identity-based-policies.html#permissions_grant-limited-resources) tied to roles. Any role used to call fcreds will require an IAM policy that looks a bit like this:
 
 ```YAML
 - PolicyName: SecretsManagerAccess
