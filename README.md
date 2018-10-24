@@ -43,7 +43,7 @@ awssecrets -r us-east-1 exec -n postgresqlRootPwd -n mysqlRootPwd -- env
 
 - or -
 
-```docker
+```Dockerfile
 # how to use within a docker container
 RUN curl -sL \
   https://github.com/EconomistDigitalSolutions/fcreds/releases/download/v1.0/awssecrets_linux_amd64.tar.gz \
@@ -60,7 +60,7 @@ CMD /usr/local/bin/fcreds -r eu-west-2 exec -n postgresqlRootPwd -- node worker.
 
 To be able to access the secret value from your application used [tight and granular IAM policies](https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_identity-based-policies.html#permissions_grant-limited-resources) tied to roles. Any role used to call fcreds will require an IAM policy that looks a bit like this:
 
-```yaml
+```YAML
 - PolicyName: SecretsManagerAccess
   PolicyDocument:
     Statement:
