@@ -1,8 +1,9 @@
 # fcreds awssecrets
 
-Fcreds awssecrets is a command line tool to interact with [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
+Fcreds awssecrets is a tiny command line utility to pull secrets created with [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
+[AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) is AWS's best practice for storing application secrets.  Used in conjuction with very granular IAM policies (tied to machine roles or keys) means a pretty small surface area for secret exposure. 
 
-awssecrets is written in Go and was inspired by https://github.com/Versent/unicreds
+awssecrets is written in Go with binaries for eah major platform and was inspired by https://github.com/Versent/unicreds
 
 ## Usage
 
@@ -26,23 +27,39 @@ Commands:
 
 awssecrets supports the AWS_* environment variables, and configuration in `~/.aws/`credentials` and `~/.aws/config`
 
-## Example
+## Examples
 
-1. Create a secret in AWS using the CLI
+First create a secret in secrets manager using the AWS CLI tools
 
 ```bash
-aws secretsmanager create-secret --name secret-friendly-name --secret-string secret-string-value
+aws secretsmanager create-secret --name postgresqlRootPwd --secret-string password123DontHackMe
 ```
 
-2. Execute `env` command, all secrets are loaded as environment variables.
+Now execute `env` command, all secrets are loaded as environment variables.
 
 ```bash
-awssecrets -r us-east-1 exec -n secret-name-1 -n secret-name-2 -- env
+awssecrets -r us-east-1 exec -n postgresqlRootPwd -n mysqlRootPwd -- env
+```
+
+- or -
+
+```docker
+# how to use within a docker container
+RUN curl -sL \
+  https://github.com/EconomistDigitalSolutions/fcreds/releases/download/v1.0/awssecrets_linux_amd64.tar.gz \
+ | tar zx -C /usr/local/bin \
+ && chmod +x /usr/local/bin/fcreds
+
+# our worker code is `node worker.js` simply prefix
+# exposing it this way as opposed to using an ENV statement means that only the application
+# has the secret not the whole contianer, like a local var as opposed to global scope
+CMD /usr/local/bin/fcreds -r eu-west-2 exec -n postgresqlRootPwd -- node worker.js
 ```
 
 ## IAM policy
 
-To be able to access the secret value, any role used to call fcreds will require an IAM policy that looks like this
+To be able to access the secret value from your application used [tight and granular IAM policies](https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_identity-based-policies.html#permissions_grant-limited-resources) tied to roles. Any role used to call fcreds will require an IAM policy that looks a bit like this:
+
 ```yaml
 - PolicyName: SecretsManagerAccess
   PolicyDocument:
@@ -51,14 +68,14 @@ To be able to access the secret value, any role used to call fcreds will require
       Action:
       - secretsmanager:GetSecretValue
       Resource:
-      - arn:aws:secretsmanager:region:accountId:secret:secretsName-*
+      - arn:aws:secretsmanager:region:<accountId>:secret:postgresqlRootPwd
 ```
 ## Release
 
-To release a new version you'll need Docker running on your machine and the environment variable GITHUB_TOKEN set locally. Then we can run
+To release a new version you'll need Docker running on your machine and the environment variable `GITHUB_TOKEN` set locally. Then we can run
 
 ```bash
-./release.sh v1.2
+GITHUB_TOKEN=123456ABCDEF ./release.sh v1.2
 ```
 
-release.sh takes a version number as a parameter (or we'll try to release v1.0 by default)
+`release.sh` takes a version number as a parameter (or we'll try to release v1.0 by default)
