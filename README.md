@@ -3,7 +3,7 @@
 Fcreds awssecrets is a tiny command line utility to pull secrets created with [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
 [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) is AWS's best practice for storing application secrets.  Used in conjuction with very granular IAM policies (tied to machine roles or keys) means a pretty small surface area for secret exposure. 
 
-awssecrets is written in Go with binaries for eah major platform and was inspired by https://github.com/Versent/unicreds
+awssecrets is written in Go with binaries for each major platform and was inspired by https://github.com/Versent/unicreds
 
 ## Usage
 
@@ -68,7 +68,7 @@ To access the secret value from your application and keep things proper tight us
       Action:
       - secretsmanager:GetSecretValue
       Resource:
-      - arn:aws:secretsmanager:region:<accountId>:secret:postgresqlRootPwd
+      - arn:aws:secretsmanager:<region>:<accountId>:secret:postgresqlRootPwd
 ```
 ## Release
 
