@@ -79,3 +79,7 @@ GITHUB_TOKEN=123456ABCDEF ./release.sh v1.2
 ```
 
 `release.sh` takes a version number as a parameter (or we'll try to release v1.0 by default)
+
+## To Do
+
+Currently the secret name needs to match the name of the environment variable that is used in the code. We should add the possibility to set the variable name to a different format.
