@@ -38,7 +38,7 @@ aws secretsmanager create-secret --name postgresqlRootPwd --secret-string passwo
 Now execute `env` command, all secrets are loaded as environment variables.
 
 ```bash
-awssecrets -r us-east-1 exec -n postgresqlRootPwd -n mysqlRootPwd -- env
+fcreds -r us-east-1 exec -n postgresqlRootPwd -n mysqlRootPwd -- env
 ```
 
 \- or -
