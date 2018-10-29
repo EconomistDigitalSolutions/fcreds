@@ -68,7 +68,7 @@ To access the secret value from your application and keep things proper tight us
       Action:
       - secretsmanager:GetSecretValue
       Resource:
-      - arn:aws:secretsmanager:<region>:<accountId>:secret:postgresqlRootPwd
+      - arn:aws:secretsmanager:<region>:<accountId>:secret:postgresqlRootPwd-*
 ```
 ## Release
 
